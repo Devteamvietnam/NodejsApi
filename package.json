@@ -8,7 +8,10 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.10.8",
+    "nodemon": "^2.0.4",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "morgan": "^1.10.0",

@@ -6,6 +6,18 @@ const usersRoute = require('./routes/user')
 
 const app = express()
 
+//DB
+const mongooClient = require('mongoose')
+    mongooClient.connect('mongodb://localhost:27017/nodejsapi', {
+         useNewUrlParser: true,
+         useUnifiedTopology: true 
+        })
+        .then(() => {
+            console.log(' Connected ✔')})
+        .catch(() => {
+            console.error(` ❌ Connect failed ${error}`)    
+        })
+
 // Middlewares (chay truoc khi xu ly)
 app.use(logger('dev')) // dev show so giay hoan thanh cua mot request, run phuong thuc nao v.v
 
