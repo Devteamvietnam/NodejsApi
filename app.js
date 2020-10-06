@@ -1,3 +1,4 @@
+const bodyParser = require('body-parser')
 const express = require('express')
 // logger
 const logger = require('morgan')
@@ -20,7 +21,7 @@ const mongooClient = require('mongoose')
 
 // Middlewares (chay truoc khi xu ly)
 app.use(logger('dev')) // dev show so giay hoan thanh cua mot request, run phuong thuc nao v.v
-
+app.use(bodyParser.json())
 // Routes
 app.get('/', (req, res, next) =>{
     return res.status(200).json({
