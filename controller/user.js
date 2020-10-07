@@ -66,10 +66,34 @@ const newUser = async (req, res, next) => {
 //     }).catch(error => next(error))
 // }
 
+const getUserById = async (req, res, next) => {
+    const { userID }= req.params
+    const user = await User.findById(userID)
+    return res.status(200).json({user})
+}
 
+const replaceUser = async (req, res, next) => {
+    // enforce new user to old user
+    const { userID } = req.params
+    const newUser = req.body
+    const result = await User.findByIdAndUpdate(userID, newUser)
+    return res.status(200).json({success: true})
+}
+
+const updateUser = async (req, res, next) => {
+    // number of fields
+    const { userID } = req.params
+    const newUser = req.body
+    const result = await User.findByIdAndUpdate(userID, newUser)
+    return res.status(200).json({success: true})
+
+}
 
 
 module.exports = {
     index,
-    newUser
+    newUser,
+    getUserById,
+    replaceUser,
+    updateUser
 }
