@@ -4,6 +4,7 @@ const express = require('express')
 const logger = require('morgan')
 
 const usersRoute = require('./routes/user')
+const deckRoute = require('./routes/deck')
 
 const app = express()
 
@@ -29,6 +30,7 @@ app.get('/', (req, res, next) =>{
     })
 })
 app.use('/api/v1', usersRoute)
+app.use('/api/v1', deckRoute)
 
 // Catch 404 Error forward them to error handler
 app.use((res, req, next) => {
