@@ -6,6 +6,7 @@
  */
 
  const User = require('../models/User')
+ const Deck = require('../models/Deck')
 
   // callBack
 // const index = (req, res, next) => {
@@ -28,7 +29,7 @@ const index = async (req, res, next) => {
 }
 
 const newUser = async (req, res, next) => {
-        const newUser = new User(req.body)
+        const newUser = new User(req.value.body)
         await newUser.save()
         return res.status(201).json({user: newUser})
 }
@@ -66,10 +67,62 @@ const newUser = async (req, res, next) => {
 //     }).catch(error => next(error))
 // }
 
+const getUserById = async (req, res, next) => {
+    const { userID }= req.value.params
+    const user = await User.findById(userID)
+    return res.status(200).json({user})
+}
 
+const replaceUser = async (req, res, next) => {
+    // enforce new user to old user
+    const { userID } = req.value.params
+    const newUser = req.value.body
+    const result = await User.findByIdAndUpdate(userID, newUser)
+    return res.status(200).json({success: true})
+}
+
+const updateUser = async (req, res, next) => {
+    // number of fields
+    const { userID } = req.value.params
+    const newUser = req.value.body
+    const result = await User.findByIdAndUpdate(userID, newUser)
+    return res.status(200).json({success: true})
+
+}
+
+const getUserDeck = async (req, res, next) => {
+    const { userID } = req.value.params
+    // Get user
+    const user = await User.findById(userID).populate('decks')
+    return res.status(200).json({decks: user.decks})
+}
+
+const newUserDeck = async (req, res, next) => {
+    const { userID } = req.value.params
+    // create new deck
+    const newDeck = new Deck(req.value.body)
+    // Get user
+    const user = await User.findById(userID)
+    // Assign user a deck
+    newDeck.owner = user
+    //save
+    await newDeck.save()
+    //add Deck to user deck array 'decks'
+    // error "Maximum call stack size exceeded" fix -> ._id
+    user.decks.push(newDeck._id)
+    // save the user
+    await user.save()
+
+    res.status(201).json({deck: newDeck})
+}
 
 
 module.exports = {
     index,
-    newUser
+    newUser,
+    getUserById,
+    replaceUser,
+    updateUser,
+    getUserDeck,
+    newUserDeck
 }
