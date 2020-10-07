@@ -68,14 +68,14 @@ const newUser = async (req, res, next) => {
 // }
 
 const getUserById = async (req, res, next) => {
-    const { userID }= req.params
+    const { userID }= req.value.params
     const user = await User.findById(userID)
     return res.status(200).json({user})
 }
 
 const replaceUser = async (req, res, next) => {
     // enforce new user to old user
-    const { userID } = req.params
+    const { userID } = req.value.params
     const newUser = req.body
     const result = await User.findByIdAndUpdate(userID, newUser)
     return res.status(200).json({success: true})
@@ -83,7 +83,7 @@ const replaceUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
     // number of fields
-    const { userID } = req.params
+    const { userID } = req.value.params
     const newUser = req.body
     const result = await User.findByIdAndUpdate(userID, newUser)
     return res.status(200).json({success: true})
@@ -91,14 +91,14 @@ const updateUser = async (req, res, next) => {
 }
 
 const getUserDeck = async (req, res, next) => {
-    const { userID } = req.params
+    const { userID } = req.value.params
     // Get user
     const user = await User.findById(userID).populate('decks')
     return res.status(200).json({decks: user.decks})
 }
 
 const newUserDeck = async (req, res, next) => {
-    const { userID } = req.params
+    const { userID } = req.value.params
     // create new deck
     const newDeck = new Deck(req.body)
     // Get user
