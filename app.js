@@ -7,6 +7,7 @@ const usersRoute = require('./routes/user')
 const deckRoute = require('./routes/deck')
 
 const app = express()
+const helmet = require("helmet");
 
 //DB
 const mongooClient = require('mongoose')
@@ -23,6 +24,8 @@ const mongooClient = require('mongoose')
 // Middlewares (chay truoc khi xu ly)
 app.use(logger('dev')) // dev show so giay hoan thanh cua mot request, run phuong thuc nao v.v
 app.use(bodyParser.json())
+app.use(helmet());
+
 // Routes
 app.get('/', (req, res, next) =>{
     return res.status(200).json({
