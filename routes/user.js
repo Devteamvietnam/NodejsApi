@@ -13,4 +13,7 @@ router.route("/users/:userID")
     .get(UserController.getUserById)
     .put(UserController.replaceUser)
     .patch(UserController.updateUser)
+router.route("/users/:userID/decks")
+    .get(UserController.getUserDeck)
+    .post(UserController.newUserDeck)
 module.exports = router

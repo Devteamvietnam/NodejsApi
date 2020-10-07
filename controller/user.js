@@ -6,6 +6,7 @@
  */
 
  const User = require('../models/User')
+ const Deck = require('../models/Deck')
 
   // callBack
 // const index = (req, res, next) => {
@@ -89,11 +90,39 @@ const updateUser = async (req, res, next) => {
 
 }
 
+const getUserDeck = async (req, res, next) => {
+    const { userID } = req.params
+    // Get user
+    const user = await User.findById(userID).populate('decks')
+    return res.status(200).json({decks: user.decks})
+}
+
+const newUserDeck = async (req, res, next) => {
+    const { userID } = req.params
+    // create new deck
+    const newDeck = new Deck(req.body)
+    // Get user
+    const user = await User.findById(userID)
+    // Assign user a deck
+    newDeck.owner = user
+    //save
+    await newDeck.save()
+    //add Deck to user deck array 'decks'
+    // error "Maximum call stack size exceeded" fix -> ._id
+    user.decks.push(newDeck._id)
+    // save the user
+    await user.save()
+
+    res.status(201).json({deck: newDeck})
+}
+
 
 module.exports = {
     index,
     newUser,
     getUserById,
     replaceUser,
-    updateUser
+    updateUser,
+    getUserDeck,
+    newUserDeck
 }
