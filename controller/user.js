@@ -2,11 +2,12 @@
  * we can interact with mongoose in three different ways:
  *  [✔] callBack
  *  [✔] promises
- *  [x] Async / await (promises)
+ *  [✔] Async / await (promises)
  */
 
- // callBack
  const User = require('../models/User')
+
+  // callBack
 // const index = (req, res, next) => {
 //     // callBack way
 //     User.find({}, (error, users) => {
@@ -19,13 +20,26 @@
 //     // })
 // }
 
-// Promise 
-const index = (req, res, next) => {
-    // Promises way
-    User.find({}).then((users) => {
-        res.status(200).json({users})
-    }).catch(error => next(error))
+// async / await
+// express-promise-router remove try catch
+const index = async (req, res, next) => {
+        const users = await User.find({})
+        return res.status(200).json({users})
 }
+
+const newUser = async (req, res, next) => {
+        const newUser = new User(req.body)
+        await newUser.save()
+        return res.status(201).json({user: newUser})
+}
+
+// // Promise 
+// const index = (req, res, next) => {
+//     // Promises way
+//     User.find({}).then((users) => {
+//         res.status(200).json({users})
+//     }).catch(error => next(error))
+// }
 
 // callback
 // const newUser = (req, res, next) => {
@@ -41,16 +55,19 @@ const index = (req, res, next) => {
 //     })
 // }
 // Promise way
-const newUser = (req, res, next) => {
-    console.log('req.body content', req.body)
-    //create object model
+// const newUser = (req, res, next) => {
+//     console.log('req.body content', req.body)
+//     //create object model
 
-    const newUser = new User(req.body)
-    console.log('newUser', newUser)
-    newUser.save().then(user => {
-        return res.status(201).json({user})
-    }).catch(error => next(error))
-}
+//     const newUser = new User(req.body)
+//     console.log('newUser', newUser)
+//     newUser.save().then(user => {
+//         return res.status(201).json({user})
+//     }).catch(error => next(error))
+// }
+
+
+
 
 module.exports = {
     index,

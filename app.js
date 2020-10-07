@@ -32,14 +32,14 @@ app.use('/api/v1', usersRoute)
 
 // Catch 404 Error forward them to error handler
 app.use((res, req, next) => {
-    const error = new Error('Not Found')
-    error.status = 404
-    next(error) // chuyen den ham xu ly
+    const err = new Error('Not Found')
+    err.status = 404
+    next(err) // chuyen den ham xu ly
 })
 // Error handler function // endpoint function error handler // tra loi ra cho client
-app.use(() => {
-    const error =  app.get('env') === 'development' ? error: {}
-    const status = error.status || 500
+app.use(( err, req, res, next ) => {
+    const error =  app.get('env') === 'development' ? err: {}
+    const status = err.status || 500
     
     // response to client error
     res.status(status).json({
