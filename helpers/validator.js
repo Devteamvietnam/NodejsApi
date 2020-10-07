@@ -1,4 +1,5 @@
 const Joi = require('@hapi/joi')
+
 // middleware 
 const validateParam = (schema, name) => {
     return (req, res, next) => {
@@ -19,13 +20,45 @@ const validateParam = (schema, name) => {
         }
     }
 }
+
+const validateBody = (schema) => {
+    return (req, res, next) => {
+        const validatorResult = schema.validate(req.body)
+
+        if (validatorResult.error) {
+            return res.status(400).json(validatorResult.error)
+        }else {
+             // if error using key value joi
+             if (!req.value) req.value = {}  // req.value object empty
+             if (!req.value['params']) req.value.params = {}
+             req.value.body = validatorResult.value
+             next()
+        }
+    }
+}
+
 const schemas = {
     idSchema: Joi.object().keys({
         params: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
+    }),
+    bodySchema: Joi.object().keys({
+        firstName: Joi.string().min(2).required(),
+        lastName: Joi.string().min(2).required(),
+        email: Joi.string().email().required()
+    }),
+    updateBodySchema: Joi.object().keys({
+        firstName: Joi.string().min(2),
+        lastName: Joi.string().min(2),
+        email: Joi.string().email()
+    }),
+    decksSchema: Joi.object().keys({
+        name: Joi.string().min(6).required(),
+        description: Joi.string().min(10).required()
     })
 }
 
 module.exports = {
     validateParam,
-    schemas
+    schemas,
+    validateBody
 }

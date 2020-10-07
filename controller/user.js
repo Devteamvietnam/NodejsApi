@@ -29,7 +29,7 @@ const index = async (req, res, next) => {
 }
 
 const newUser = async (req, res, next) => {
-        const newUser = new User(req.body)
+        const newUser = new User(req.value.body)
         await newUser.save()
         return res.status(201).json({user: newUser})
 }
@@ -76,7 +76,7 @@ const getUserById = async (req, res, next) => {
 const replaceUser = async (req, res, next) => {
     // enforce new user to old user
     const { userID } = req.value.params
-    const newUser = req.body
+    const newUser = req.value.body
     const result = await User.findByIdAndUpdate(userID, newUser)
     return res.status(200).json({success: true})
 }
@@ -84,7 +84,7 @@ const replaceUser = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
     // number of fields
     const { userID } = req.value.params
-    const newUser = req.body
+    const newUser = req.value.body
     const result = await User.findByIdAndUpdate(userID, newUser)
     return res.status(200).json({success: true})
 
@@ -100,7 +100,7 @@ const getUserDeck = async (req, res, next) => {
 const newUserDeck = async (req, res, next) => {
     const { userID } = req.value.params
     // create new deck
-    const newDeck = new Deck(req.body)
+    const newDeck = new Deck(req.value.body)
     // Get user
     const user = await User.findById(userID)
     // Assign user a deck
